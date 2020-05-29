@@ -12,6 +12,7 @@ export class HomePage {
 
   map: any;
   posicaoAtual: any;
+  posicaoB: any;
 
   @ViewChild('map', {read: ElementRef, static:false}) mapRef: ElementRef;
 
@@ -34,7 +35,7 @@ export class HomePage {
       position: this.posicaoAtual,
       map: this.map,
       title: "Minha localização",
-      icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
+      icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
       animation: google.maps.Animation.DROP
     });
 
@@ -42,6 +43,7 @@ export class HomePage {
 
   ionViewDidEnter(){
     this.showMap();
+    this.marcB();
   }
 
   public async buscaPosicao(){
@@ -57,4 +59,32 @@ export class HomePage {
 
   }
 
+  /**
+   * posicaoB
+   */
+  public async marcB() {
+    const posicaoB = new google.maps.LatLng(-22.525034, -48.567559);
+    await this.buscaPosicaoB();
+
+    const marcador = new google.maps.Marker({
+      position: this.posicaoB,
+      map: this.map,
+      title: "Localização B",
+      icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
+      animation: google.maps.Animation.DROP
+    });
+  }
+
+  public async buscaPosicaoB(){
+    await this.geolocation.getCurrentPosition().then((posicaoB) => {
+       this.posicaoB = {
+         lat: posicaoB.coords.latitude,
+         lng: posicaoB.coords.longitude
+       }
+ 
+      }).catch((error) => {
+        console.log('Error getting location', error);
+      });
+
+}
 }
